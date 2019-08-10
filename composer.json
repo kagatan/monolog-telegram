@@ -1,0 +1,32 @@
+{
+  "name": "kagatan/monolog-telegram",
+  "description": "A handler for Monolog that sends messages to Telegram Channels. Laravel",
+  "keywords": [
+    "log",
+    "laravel",
+    "monolog",
+    "monolog-telegram",
+    "logging",
+    "bots",
+    "telegram",
+    "channels"
+  ],
+  "homepage": "https://github.com/kagatan/monolog-telegram",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Kagatan",
+      "email": "stupakovmax@gmail.com",
+      "role": "Developer"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Kagatan\\MonologTelegram\\": "src"
+    }
+  },
+  "require": {
+    "monolog/monolog": "~1",
+    "ext-curl": "*"
+  }
+}
