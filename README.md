@@ -14,7 +14,7 @@ Install using composer:
 composer require kagatan/monolog-telegram  
 ```
 
-# Installation
+# Usage
 Open up config/logging.php and find the channels key. Add the following channel to the list.
 
 ```php
