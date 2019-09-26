@@ -66,6 +66,8 @@ class TelegramHandler extends AbstractProcessingHandler
      */
     public function send($message)
     {
+        $message = substr($message, 0, 4096);
+        
         try {
             $ch = curl_init();
             $url = self::host . $this->token . "/SendMessage";
