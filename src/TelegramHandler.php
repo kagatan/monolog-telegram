@@ -49,7 +49,7 @@ class TelegramHandler extends AbstractProcessingHandler
      * @param $record [] log data
      * @return void
      */
-    public function write(array $record)
+    public function write(array $record): void
     {
         $date =  date('Y-m-d H:i:s');
         $message =  $date . PHP_EOL .
