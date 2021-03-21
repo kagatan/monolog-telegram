@@ -51,9 +51,9 @@ class TelegramHandler extends AbstractProcessingHandler
      */
     public function write(array $record): void
     {
-        $date =  date('Y-m-d H:i:s');
-        $message =  $date . PHP_EOL .
-        $this->getEmoji($record['level']) . $record['level_name'] . ': ' . $record['formatted'];
+        $date = date('Y-m-d H:i:s');
+        $message = $date . PHP_EOL .
+            $this->getEmoji($record['level']) . $record['level_name'] . ': ' . $record['formatted'];
 
         $this->send($message);
     }
@@ -67,30 +67,51 @@ class TelegramHandler extends AbstractProcessingHandler
     public function send($message)
     {
         $message = substr($message, 0, 4096);
-        
-        try {
-            $ch = curl_init();
-            $url = self::host . $this->token . "/SendMessage";
-            $timeOut = $this->timeOut;
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeOut);
-            curl_setopt($ch, CURLOPT_TIMEOUT, $timeOut);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(array(
-                'text'       => $message,
-                'chat_id'    => $this->channel,
-                'parse_mode' => 'html'
-            )));
-            $result = curl_exec($ch);
-            $result = json_decode($result, 1);
 
-            if ($result['ok'] === false) {
-                echo 'telegram api response : ' . $result['description'];
+        if (!empty($this->token) and !empty($this->channel)) {
+
+            try {
+                $ch = curl_init();
+                $url = self::host . $this->token . "/SendMessage";
+                $timeOut = $this->timeOut;
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeOut);
+                curl_setopt($ch, CURLOPT_TIMEOUT, $timeOut);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(array(
+                    'text'       => $message,
+                    'chat_id'    => $this->channel,
+                    'parse_mode' => 'html'
+                )));
+                $result = curl_exec($ch);
+                $result = json_decode($result, 1);
+                
+                if ($result['ok'] !== false) {
+                    return [
+                        'ok'      => true,
+                        'message' => 'Sended'
+                    ];
+                } else {
+                    return [
+                        'ok'      => false,
+                        'message' => $result['description']
+                    ];
+                }
+
+            } catch (Exception $error) {
+                return [
+                    'ok'      => false,
+                    'message' => $error
+                ];
             }
-        } catch (Exception $error) {
-            echo $error;
+        } else {
+            return [
+                'ok'      => false,
+                'message' => 'Not config chat or token'
+            ];
         }
+
     }
 
     /**
