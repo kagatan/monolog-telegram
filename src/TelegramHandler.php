@@ -6,6 +6,7 @@ use Exception;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
+use Monolog\LogRecord;
 
 /**
  * Telegram Handler For Monolog
@@ -49,7 +50,7 @@ class TelegramHandler extends AbstractProcessingHandler
      * @param $record [] log data
      * @return void
      */
-    public function write(array $record): void
+    public function write(LogRecord $record): void
     {
         $date = date('Y-m-d H:i:s');
         $message = $date . PHP_EOL .
